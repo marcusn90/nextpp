@@ -1,2 +1,2 @@
 build:
-	deno run --importmap=./import_map.json --allow-read --allow-write --unstable ./index.ts
+	deno run --importmap=./import_map.json --allow-net --allow-read --allow-write --unstable ./index.ts

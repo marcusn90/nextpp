@@ -1,16 +1,16 @@
 import { ensureFileSync, existsSync } from "https://deno.land/std/fs/mod.ts";
-import { log } from "nextpp/deps.ts";
+import { Log } from "nextpp/deps/utils.ts";
 import { build_page } from "nextpp/page_builder.jsx";
 import { IConfig, IConfigRouteEntry } from "nextpp/interfaces.ts";
 import { assert } from "https://deno.land/std@0.74.0/_util/assert.ts";
 
-//setup to make log.debug output smthng
-await log.setup({
+//setup to make Log.debug output smthng
+await Log.setup({
   handlers: {
-    console: new log.handlers.ConsoleHandler("DEBUG"),
+    console: new Log.handlers.ConsoleHandler("DEBUG"),
   },
   loggers: {
-    // configure default logger available via short-hand methods above
+    // configure default Logger available via short-hand methods above
     default: {
       level: "DEBUG",
       handlers: ["console"],
@@ -45,7 +45,7 @@ async function process_route_entry(
     try {
       Root = await import(src_file);
     } catch (e) {
-      log.error(`Failed to import ${src_file} -> ${e.message}`);
+      Log.error(`Failed to import ${src_file} -> ${e.message}`);
       continue;
     }
 
@@ -59,7 +59,7 @@ async function process_route_entry(
         file,
         build_page(Root.default),
       );
-      log.debug(`- Created ${file}`);
+      Log.debug(`- Created ${file}`);
     });
   }
 }
@@ -83,18 +83,18 @@ export async function build_from_config(config: IConfig) {
   const { output_dir } = config;
   try {
     await Deno.remove(output_dir, { recursive: true });
-    log.info(`Remove output dir: ${output_dir} removed.`);
+    Log.info(`Remove output dir: ${output_dir} removed.`);
   } catch (e) {
-    log.info(`Remove output dir: not found`);
+    Log.info(`Remove output dir: not found`);
   }
 
   await Deno.mkdir(output_dir, { recursive: true });
-  log.info(`Create output dir: ${output_dir} created.`);
+  Log.info(`Create output dir: ${output_dir} created.`);
   for (const r of config.routes) {
     const fs_path = r.path;
-    log.info(`Build routes for ${fs_path}:`);
+    Log.info(`Build routes for ${fs_path}:`);
     if (!existsSync(fs_path)) {
-      log.warning("Path not found. Continue");
+      Log.warning("Path not found. Continue");
       continue;
     }
     const stat = Deno.statSync(fs_path);
@@ -106,5 +106,5 @@ export async function build_from_config(config: IConfig) {
     }
     await process_route_entry(files, output_dir, r);
   }
-  log.info("Done");
+  Log.info("Done");
 }

@@ -1,9 +1,14 @@
-import { React } from "nextpp/deps.ts";
+import React from "nextpp/deps/react.ts";
+import styled from "nextpp/deps/styled_components.ts";
+
+const H2 = styled.h2`
+  color: red;
+  `;
 
 export default function Post() {
   return <>
-    <h2>
+    <H2>
       Post
-    </h2>
+    </H2>
   </>;
 }

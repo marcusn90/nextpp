@@ -1,4 +1,4 @@
-import { React } from "nextpp/deps.ts";
+import React from "nextpp/deps/react.ts";
 
 const App = (props) =>
   <div>

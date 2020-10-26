@@ -6,8 +6,5 @@ import ReactDOM from "https://dev.jspm.io/react-dom@16.13.1/index.js";
 // @deno-types="https://denopkg.com/soremwar/deno_types/react-dom/v16.13.1/server.d.ts"
 import ReactDOMServer from "https://dev.jspm.io/react-dom@16.13.1/server.js";
 
-import * as styledComponents from "https://dev.jspm.io/styled-components@5.1.1";
-
-import * as log from "https://deno.land/std/log/mod.ts";
-
-export { log, React, ReactDOM, ReactDOMServer, styledComponents };
+export default React;
+export { ReactDOM, ReactDOMServer };
