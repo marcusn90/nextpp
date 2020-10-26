@@ -1,4 +1,20 @@
 // .vscode/settings.json
 {
     "deno.enable": true,
+    "deno.import_map": "./import_map.json",
+    "[javascript]": {
+        "editor.defaultFormatter": "denoland.vscode-deno",
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "denoland.vscode-deno",
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "denoland.vscode-deno",
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "denoland.vscode-deno",
+    },
+    "deno.import_intellisense_origins": {
+        "https://deno.land": true
+    },
 }

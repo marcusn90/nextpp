@@ -1,4 +1,4 @@
-import { React } from "./../deps.ts";
+import { React } from "nextpp/deps.ts";
 
 function Page(props) {
   return <html>
