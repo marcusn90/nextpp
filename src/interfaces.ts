@@ -6,5 +6,6 @@ export interface IConfigRouteEntry {
 
 export interface IConfig {
   output_dir: string;
+  index_page: string;
   routes: Array<IConfigRouteEntry>;
 }

@@ -4,20 +4,6 @@ import { build_page } from "nextpp/page_builder.jsx";
 import { IConfig, IConfigRouteEntry } from "nextpp/interfaces.ts";
 import { assert } from "https://deno.land/std@0.74.0/_util/assert.ts";
 
-//setup to make Log.debug output smthng
-await Log.setup({
-  handlers: {
-    console: new Log.handlers.ConsoleHandler("DEBUG"),
-  },
-  loggers: {
-    // configure default Logger available via short-hand methods above
-    default: {
-      level: "DEBUG",
-      handlers: ["console"],
-    },
-  },
-});
-
 function list_dir_files(path: string) {
   const list = [];
   for (const entry of Deno.readDirSync(path)) {
@@ -30,9 +16,10 @@ async function process_route_entry(
   src_files_list: Array<string>,
   output_dir: string,
   route_cfg: IConfigRouteEntry,
-) {
+): Promise<Array<string>> {
   const prepared = await route_cfg.prepare();
   console.log(src_files_list);
+  const generated_urls: Array<string> = [];
   for (const _src_file of src_files_list) {
     let Root: any; // TODO: find Module typedef or something
 
@@ -60,8 +47,10 @@ async function process_route_entry(
         build_page(Root.default),
       );
       Log.debug(`- Created ${file}`);
+      generated_urls.push("/" + page_file_name);
     });
   }
+  return generated_urls;
 }
 
 function validate_config(config: IConfig) {
@@ -90,6 +79,7 @@ export async function build_from_config(config: IConfig) {
 
   await Deno.mkdir(output_dir, { recursive: true });
   Log.info(`Create output dir: ${output_dir} created.`);
+  const generated_urls: Array<string> = [];
   for (const r of config.routes) {
     const fs_path = r.path;
     Log.info(`Build routes for ${fs_path}:`);
@@ -104,7 +94,11 @@ export async function build_from_config(config: IConfig) {
     } else {
       files = [fs_path];
     }
-    await process_route_entry(files, output_dir, r);
+    generated_urls.push(...(await process_route_entry(files, output_dir, r)));
   }
+  Deno.writeTextFileSync(
+    `${output_dir}/generated_urls.json`,
+    JSON.stringify(generated_urls),
+  );
   Log.info("Done");
 }
